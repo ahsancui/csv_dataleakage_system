@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/agent_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Hamza"
+        android:textColor="@color/secondary"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/agent_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="00000000000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/agent_email"
+        app:layout_constraintTop_toBottomOf="@+id/agent_email" />
+
+    <TextView
+        android:id="@+id/agent_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="abc@gmail.com"
+        android:textColor="@color/danger"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/agent_name"
+        app:layout_constraintTop_toBottomOf="@+id/agent_name" />
+
+    <TextView
+        android:id="@+id/agent_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="Abc sdsf"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/agent_phone"
+        app:layout_constraintTop_toBottomOf="@+id/agent_phone" />
+</androidx.constraintlayout.widget.ConstraintLayout>

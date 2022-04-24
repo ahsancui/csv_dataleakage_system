@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity">
+
+    <EditText
+        android:id="@+id/register_name_edt"
+        android:layout_width="270dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/gray"
+        android:ems="10"
+        android:hint="Type name!"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/register_email_edt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/register_email_edt"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/gray"
+        android:ems="10"
+        android:hint="Type email!"
+        android:inputType="textEmailAddress"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/register_pass_edt"
+        app:layout_constraintEnd_toEndOf="@+id/register_name_edt"
+        app:layout_constraintStart_toStartOf="@+id/register_name_edt" />
+
+    <EditText
+        android:id="@+id/register_pass_edt"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/gray"
+        android:ems="10"
+        android:hint="Type password!"
+        android:inputType="textPassword"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/register_email_edt"
+        app:layout_constraintStart_toStartOf="@+id/register_email_edt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <EditText
+        android:id="@+id/register_address_edt"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/gray"
+        android:ems="10"
+        android:hint="Type address!"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/register_phone_edt"
+        app:layout_constraintStart_toStartOf="@+id/register_phone_edt"
+        app:layout_constraintTop_toBottomOf="@+id/register_phone_edt" />
+
+    <EditText
+        android:id="@+id/register_phone_edt"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/gray"
+        android:ems="10"
+        android:hint="Type phone!"
+        android:inputType="phone"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/register_pass_edt"
+        app:layout_constraintStart_toStartOf="@+id/register_pass_edt"
+        app:layout_constraintTop_toBottomOf="@+id/register_pass_edt" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/register_btn"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border"
+        android:backgroundTint="@color/secondary"
+        android:text="Register"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/register_address_edt"
+        app:layout_constraintStart_toStartOf="@+id/register_address_edt"
+        app:layout_constraintTop_toBottomOf="@+id/register_address_edt" />
+
+    <TextView
+        android:id="@+id/register_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/danger"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/register_btn"
+        app:layout_constraintStart_toStartOf="@+id/register_btn"
+        app:layout_constraintTop_toBottomOf="@+id/register_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

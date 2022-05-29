@@ -3,6 +3,8 @@ package com.dataleakage.dataleakage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.dataleakage.dataleakage.databinding.ActivityDashboardBinding
 
 class DashboardActivity : AppCompatActivity() {
@@ -51,4 +53,30 @@ class DashboardActivity : AppCompatActivity() {
         }
 
     } // onCreate ends
+
+    // adding log out menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.logout_menu, menu)
+        return true
+    }
+
+    // handling on click on the menu logout button
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_logout -> {
+                val storage = getSharedPreferences("app", MODE_PRIVATE)
+                with(storage.edit()){
+                    remove("auth_token")
+                    remove("isAgent")
+                    apply()
+                }
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+// menu ends
+
 } // class ends

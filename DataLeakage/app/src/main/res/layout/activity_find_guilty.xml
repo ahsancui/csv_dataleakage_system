@@ -25,6 +25,8 @@
             android:background="@drawable/border"
             android:backgroundTint="#9C27B0"
             android:drawableStart="@drawable/ic_round_attach_file_24"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingHorizontal="15dp"
             android:text="Choose file"
             android:textAllCaps="false"
@@ -41,6 +43,8 @@
             android:background="@drawable/border"
             android:backgroundTint="#9C27B0"
             android:drawableLeft="@drawable/ic_baseline_select_all_24"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:paddingHorizontal="15dp"
             android:text="Select original file"
             android:textAllCaps="false"
@@ -74,6 +78,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guilty_error" />
+
+    <TextView
+        android:id="@+id/guilty_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/danger"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />

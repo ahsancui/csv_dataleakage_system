@@ -32,7 +32,7 @@ def register_agent(body:RegisterSchema, db:Session = Depends(get_db), distribute
     
     # if already register then return error
     if already_register:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"Agent with email {body.email} already exists!")
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"Agent with email already exists!")
     
     # hasing the password
     hashed_password = hashing.get_password_hash(body.password)

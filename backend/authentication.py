@@ -1,5 +1,6 @@
 #===================================================={ all imports }===========================================================
 
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -14,6 +15,7 @@ SECRET_KEY = "JWT_SECRET_KEY"
 ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
 
 #==========================================={ generate json web token function }===============================================
 

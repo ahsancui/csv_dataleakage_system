@@ -35,7 +35,7 @@ def single_agent(id:int, db:Session = Depends(get_db), distributer:User = Depend
 
 #================================================={ all agents route }=========================================================
 
-@router.get('/all', response_model=List[ResponseSchema])
+@router.get('/', response_model=List[ResponseSchema])
 def all_agents(db:Session = Depends(get_db), distributer:User = Depends(auth_distributer)):
     return db.query(User).filter(User.isAgent == True).all()
 

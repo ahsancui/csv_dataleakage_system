@@ -33,6 +33,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db:Session = Depends
     token = generate_jwt_token(token_data)
     
     # return JWT token
-    return {"access_token": token}
+    return {"auth_token": token, "isAgent":user.isAgent}
 
 #======================================================{ Code ends }===========================================================

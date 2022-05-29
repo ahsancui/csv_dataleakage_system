@@ -1,5 +1,5 @@
 #===================================================={ all imports }============================================================
-
+import uvicorn
 from fastapi import FastAPI
 
 from routes import agent, login, upload, download, guilty, register, files
@@ -23,4 +23,8 @@ app.include_router(upload.router, prefix='/upload', tags=['File'])
 app.include_router(guilty.router, prefix='/guilty', tags=['File'])
 app.include_router(files.router, prefix='/files', tags=['File'])
 
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0')
+    
 #======================================================{ Code ends }===========================================================

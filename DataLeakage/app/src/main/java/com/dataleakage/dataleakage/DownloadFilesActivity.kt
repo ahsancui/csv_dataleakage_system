@@ -1,24 +1,29 @@
 package com.dataleakage.dataleakage
 
+import android.Manifest
 import android.app.AlertDialog
-import android.app.DownloadManager
+import android.app.ProgressDialog
 import android.content.*
-import android.net.Uri
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.text.InputType
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.marginLeft
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.dataleakage.dataleakage.adaptors.FilesAdaptor
 import com.dataleakage.dataleakage.databinding.ActivityDownloadFilesBinding
 import com.dataleakage.dataleakage.models.FileModel
 import okhttp3.*
 import org.json.JSONArray
-import java.io.IOException
+import java.io.*
+import java.lang.Exception
 
 class DownloadFilesActivity : AppCompatActivity() {
     // binding class attribute
@@ -28,8 +33,11 @@ class DownloadFilesActivity : AppCompatActivity() {
 
     private lateinit var adaptor:FilesAdaptor
 
-    private var download_id:Long = 0
     private  var file_name = "Data leakage download"
+
+    private lateinit var progressDialog: ProgressDialog
+
+    private val PERMISSION_REQUEST_CODE = 50
 
     // onCreate function
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +49,11 @@ class DownloadFilesActivity : AppCompatActivity() {
 
         // setting new title on action bar
         supportActionBar?.title = "Download Files"
+
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Download")
+
+        setupPermissions()
 
         // testing part
         files = ArrayList<FileModel>()
@@ -67,7 +80,7 @@ class DownloadFilesActivity : AppCompatActivity() {
                     .setPositiveButton("Download",
                         DialogInterface.OnClickListener { dialogInterface, i ->
                             file_name = input.text.toString()
-                            downloadFile(id)
+                            download(id)
                         })
                     .setNegativeButton("Cancel",
                         DialogInterface.OnClickListener { dialogInterface, i ->
@@ -77,16 +90,6 @@ class DownloadFilesActivity : AppCompatActivity() {
                 dialog.show()
             }
         })
-
-        val downloadReceiver = object: BroadcastReceiver(){
-            override fun onReceive(p0: Context?, p1: Intent?) {
-                var id = p1?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-                if(id == download_id){
-                    Toast.makeText(applicationContext, "Your download is completed", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-        registerReceiver(downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
     }// end of onCreate
 
     private fun callFilesApi(){
@@ -102,6 +105,8 @@ class DownloadFilesActivity : AppCompatActivity() {
             .addHeader("Authorization", authToken.toString())
             .get()
             .build()
+
+
         client.newCall(request)
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -125,26 +130,51 @@ class DownloadFilesActivity : AppCompatActivity() {
                 }
             })
     }
-    // using download manager to download files from api/server
-    private fun downloadFile(id : Int){
 
-        val uri = Uri.parse("${getString(R.string.host_url)}/download/${id}")
-
+    // using okhttp to download csv file
+    private  fun download(id:Int){
+        val client = OkHttpClient()
         val storage = getSharedPreferences("app", MODE_PRIVATE)
 
         val authToken = storage.getString("auth_token", "").toString()
 
-        val request = DownloadManager.Request(uri)
-            .addRequestHeader("Authorization", authToken.toString())
-            .setTitle(file_name)
-            .setDescription("Data leakage is downloading .")
-            .setMimeType("text/comma-separated-values")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+        val url = "${getString(R.string.host_url)}/download/${id}"
 
-        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        download_id = manager.enqueue(request)
-    }// downloadFile ends
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", authToken.toString())
+            .get()
+            .build()
 
+        progressDialog.setMessage("Downloading file...")
+        progressDialog.show()
+
+        client.newCall(request).enqueue(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val stream = response?.body?.bytes()
+
+                try {
+                    val path = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name+".csv")
+                    val writer = FileWriter(path)
+                    writer.write(stream!!.decodeToString())
+                    writer.flush()
+                    writer.close()
+
+                    this@DownloadFilesActivity.runOnUiThread(java.lang.Runnable {
+                        progressDialog.hide()
+                        Toast.makeText(this@DownloadFilesActivity, "Your download is completed", Toast.LENGTH_LONG).show()
+                    })
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        })
+    }
     // adding log out menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.logout_menu, menu)
@@ -169,4 +199,28 @@ class DownloadFilesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 // menu ends
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i(ContentValues.TAG, "Permission to record denied")
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                    Log.i(ContentValues.TAG, "Permission has been denied by user")
+                } else {
+                    Log.i(ContentValues.TAG, "Permission has been granted by user")
+                }
+            }
+        }
+    }
 }
